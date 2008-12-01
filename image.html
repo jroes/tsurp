@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>tsurp: {{ title|escape }}</title>
+    <link href="/static/style.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/png" href="/static/tsurp.png"/>
+  </head>
+
+  <body>
+    <div id="container">
+      <h1 class="image_title">{{ title|escape }}</h1>
+      <p class="image">
+	<a href="{{ image_url }}"><img name="image" src="{{ image_url }}" /></a>
+      </p>
+      <p class="url">
+	<a href="{{ this_url }}">{{ this_url }}</a>
+      </p>
+
+      <div id="footer">
+	<ul id="footermenu">
+	  {{ register_or_login_listitems }}
+	  <li><a href="/">tsurp</a></li>
+	  <li><a href="/static/tos.html">tos</a></li>
+	</ul>
+      </div>
+    </div>
+  </body>
+</html>

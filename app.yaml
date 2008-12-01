@@ -1,0 +1,13 @@
+application: tsurp
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /static
+  static_dir: static
+- url: /u/img/(smtp2web_.*)
+  static_files: static/\1
+  upload: static/smtp2web_.*
+- url: /.*
+  script: index.py
