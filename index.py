@@ -47,7 +47,11 @@ class ImageFile(webapp.RequestHandler):
             image = memcache.get(image_id)
             if image is None:
                 image = Image.get_by_id(from_url56(image_id))
-                memcache.add(image_id, image)
+                try:
+                    memcache.add(image_id, image)
+                except ValueError:
+                    # too big for memcache
+                    pass
 
             if image and image.image:
                 self.response.headers['Content-Type'] = "image/%s" % str(image.ext)
@@ -69,7 +73,11 @@ class ImagePage(webapp.RequestHandler):
             image = memcache.get(image_id)
             if image is None:
                 image = Image.get_by_id(from_url56(image_id))
-                memcache.add(image_id, image)
+                try:
+                    memcache.add(image_id, image)
+                except ValueError:
+                    # too big for memcache
+                    pass
 
             if not image:
                 self.error(404)
@@ -154,7 +162,12 @@ class UploadImageFromWeb(webapp.RequestHandler):
             image_id = ImageStore.add(image, ext=ext,
                                       author=author, title=title)
 
-            memcache.add(image_id, image)
+            try:
+                memcache.add(image_id, image)
+            except ValueError:
+                # too big for memcache
+                pass
+
             self.redirect('/' + image_id)
         except Exception, e:
             self.error(500)
@@ -196,7 +209,11 @@ class UploadImageFromMail(webapp.RequestHandler):
                         
                         image_id = ImageStore.add(image, ext=ext,
                                                   author=users.User(sender))
-                        memcache.add(image_id, image)
+                        try:
+                            memcache.add(image_id, image)
+                        except ValueError:
+                            # too big for memcache
+                            pass
 
                         url = IMAGE_URL % image_id
                         mail.send_mail(sender=CONTACT_ADDRESS,
