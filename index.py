@@ -162,12 +162,6 @@ class UploadImageFromWeb(webapp.RequestHandler):
             image_id = ImageStore.add(image, ext=ext,
                                       author=author, title=title)
 
-            try:
-                memcache.add(image_id, image)
-            except ValueError:
-                # too big for memcache
-                pass
-
             self.redirect('/' + image_id)
         except Exception, e:
             self.error(500)
@@ -209,11 +203,6 @@ class UploadImageFromMail(webapp.RequestHandler):
                         
                         image_id = ImageStore.add(image, ext=ext,
                                                   author=users.User(sender))
-                        try:
-                            memcache.add(image_id, image)
-                        except ValueError:
-                            # too big for memcache
-                            pass
 
                         url = IMAGE_URL % image_id
                         mail.send_mail(sender=CONTACT_ADDRESS,

@@ -25,6 +25,10 @@ class ImageStore(object):
         image.put()
 
         image_id = to_url56(image.key().id())
-        memcache.add(image_id, image)
+        try:
+            memcache.add(image_id, image)
+        except ValueError:
+            # too big for memcache
+            pass
 
         return image_id
